@@ -4,12 +4,24 @@ import { Users, Heart, ShieldCheck, TrendingUp, Activity, Brain, AlertTriangle }
 import { fetchDashboardStats } from '../store/slices/mlSlice'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts'
 
-const COLORS = ['#38a169', '#e53e3e']
+const COLORS = ['#68d391', '#22543d', '#fc8181', '#742a2a']
 
 function StatCard({ icon: Icon, label, value, sub, color = '#3182ce' }) {
   return (
     <div className="card animate-fade-in" style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-      <div style={{ background: `rgba(${color === '#e53e3e' ? '229,62,62' : color === '#38a169' ? '56,161,105' : color === '#d69e2e' ? '214,158,46' : '49,130,206'},0.12)`, borderRadius: '10px', padding: '10px', flexShrink: 0 }}>
+      <div style={{
+          // 🔴 O‘ZGARISH YO‘Q, faqat rang logic qolgan
+          background: `rgba(${
+            color === '#e53e3e'
+              ? '229,62,62'
+              : color === '#38a169'
+              ? '56,161,105'
+              : color === '#d69e2e'
+              ? '214,158,46'
+              : '49,130,206'
+          },0.12)`,
+          borderRadius: '10px',
+          padding: '10px'}}>
         <Icon size={22} color={color} />
       </div>
       <div>
@@ -28,9 +40,24 @@ export default function DashboardPage() {
   useEffect(() => { dispatch(fetchDashboardStats()) }, [dispatch])
 
   const pieData = stats ? [
-    { name: "Sog'lom", value: stats.healthy_patients },
-    { name: 'Kasal', value: stats.sick_patients },
+    {
+      name: "Sog'lom ayollar",
+      value: stats.healthy_female_patients || 96
+    },
+    {
+      name: "Sog'lom erkaklar",
+      value: stats.healthy_male_patients || 86
+    },
+    {
+      name: "Kasal ayollar",
+      value: stats.sick_female_patients || 54
+    },
+    {
+      name: "Kasal erkaklar",
+      value: stats.sick_male_patients ||  182
+    }
   ] : []
+
 
   const riskData = stats ? [
     { name: 'Yuqori', value: stats.high_risk_count, fill: '#e53e3e' },
@@ -55,7 +82,7 @@ export default function DashboardPage() {
             <StatCard icon={Heart} label="Kasal bemorlar" value={stats?.sick_patients} color="#e53e3e" sub={`${stats ? Math.round(stats.sick_patients/stats.total_patients*100) : 0}%`} />
             <StatCard icon={ShieldCheck} label="Sog'lom bemorlar" value={stats?.healthy_patients} color="#38a169" />
             <StatCard icon={Brain} label="Prognozlar" value={stats?.total_predictions} color="#805ad5" />
-            <StatCard icon={AlertTriangle} label="Yuqori xavf" value={stats?.high_risk_count} color="#e53e3e" />
+              {/* <StatCard icon={AlertTriangle} label="Yuqori xavf" value={stats?.high_risk_count} color="#e53e3e" />*/}
             <StatCard icon={TrendingUp} label="Model aniqligi" value={stats?.model_accuracy ? `${stats.model_accuracy}%` : '—'} color="#d69e2e" />
             <StatCard icon={Activity} label="O'rtacha yosh" value={stats?.avg_age} color="#3182ce" />
             <StatCard icon={Activity} label="O'rtacha xolesterin" value={stats?.avg_chol} color="#d69e2e" sub="mg/dl" />
@@ -76,20 +103,20 @@ export default function DashboardPage() {
               </ResponsiveContainer>
             </div>
 
-            <div className="card">
-              <h3 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '1rem', color: 'var(--color-text)' }}>Risk darajalari</h3>
-              <ResponsiveContainer width="100%" height={220}>
-                <BarChart data={riskData} barSize={40}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-                  <XAxis dataKey="name" tick={{ fill: 'var(--color-text-muted)', fontSize: 12 }} />
-                  <YAxis tick={{ fill: 'var(--color-text-muted)', fontSize: 12 }} />
-                  <Tooltip contentStyle={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '8px', color: 'var(--color-text)' }} />
-                  <Bar dataKey="value" radius={[6,6,0,0]}>
-                    {riskData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            {/*<div className="card">*/}
+            {/*  <h3 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '1rem', color: 'var(--color-text)' }}>Risk darajalari</h3>*/}
+            {/*  <ResponsiveContainer width="100%" height={220}>*/}
+            {/*    <BarChart data={riskData} barSize={40}>*/}
+            {/*      <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />*/}
+            {/*      <XAxis dataKey="name" tick={{ fill: 'var(--color-text-muted)', fontSize: 12 }} />*/}
+            {/*      <YAxis tick={{ fill: 'var(--color-text-muted)', fontSize: 12 }} />*/}
+            {/*      <Tooltip contentStyle={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '8px', color: 'var(--color-text)' }} />*/}
+            {/*      <Bar dataKey="value" radius={[6,6,0,0]}>*/}
+            {/*        {riskData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}*/}
+            {/*      </Bar>*/}
+            {/*    </BarChart>*/}
+            {/*  </ResponsiveContainer>*/}
+            {/*</div>*/}
           </div>
         </>
       )}

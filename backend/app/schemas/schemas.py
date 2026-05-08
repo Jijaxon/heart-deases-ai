@@ -191,6 +191,11 @@ class DashboardStats(BaseModel):
     avg_chol: float
     model_accuracy: Optional[float]
 
+    healthy_female_patients: int = 0
+    healthy_male_patients: int = 0
+    sick_female_patients: int = 0
+    sick_male_patients: int = 0
+
 
 # ─── CSV Import Schema ─────────────────────────────────────────────────────────
 

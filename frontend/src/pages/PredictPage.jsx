@@ -65,18 +65,18 @@ const FIELDS = [
 ]
 
 const DEFAULT_VALUES = {
-	age: 32,          // 30-40 oralig‘i – yosh, xavf minimal
-    sex: 0,           // 0 = ayol (erkakka nisbatan xavf kamroq)
-    cp: 3,            // 3 = og‘riq bo‘lmagan (eng yaxshi)
-    trestbps: 115,    // 110-120 – ideal qon bosimi
-    chol: 170,        // <200 – normal xolesterin
-    fbs: 0,           // 0 = yo‘q (qand normal)
-    restecg: 0,       // 0 = normal EKG
-    thalach: 165,     // yoshga mos (220-32=188, 165 normal)
-    exang: 0,         // 0 = yo‘q (mashq paytida og‘riq yo‘q)
-    oldpeak: 0,       // 0 = ST depressiyasi yo‘q (normal)
-    slope: 2,         // 2 = yuqoriga ko‘tariluvchi (eng yaxshi variant)
-    ca: 0,            // 0 = tomirlarda torayish yo‘q
+	age: 32,
+    sex: 0,
+    cp: 3,
+    trestbps: 115,
+    chol: 170,
+    fbs: 0,
+    restecg: 0,
+    thalach: 165,
+    exang: 0,
+    oldpeak: 0,
+    slope: 2,
+    ca: 0,
     thal: 2
 }
 
@@ -212,36 +212,13 @@ export default function PredictPage() {
 				{prediction && (
 					<div className="animate-fade-in" style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
 
-						{/* Main result */}
+						{/* Main result - ⚠️ "Sog'lom — 11.9% ehtimol bilan" qismi O'CHIRILDI ⚠️ */}
 						<div className="card" style={{
 							borderColor: prediction.prediction === 1 ? 'rgba(229,62,62,0.5)' : 'rgba(56,161,105,0.5)',
 							background: prediction.prediction === 1 ? 'rgba(229,62,62,0.05)' : 'rgba(56,161,105,0.05)'
 						}}>
-							<div style={{
-								display: 'flex',
-								justifyContent: 'space-between',
-								alignItems: 'center',
-								flexWrap: 'wrap',
-								gap: '1rem'
-							}}>
-								<div>
-									<div style={{display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem'}}>
-										{prediction.prediction === 1 ? <AlertTriangle size={24} color="#e53e3e"/> :
-											<CheckCircle size={24} color="#38a169"/>}
-										<span style={{
-											fontSize: '1.5rem',
-											fontWeight: 800,
-											color: prediction.prediction === 1 ? '#e53e3e' : '#38a169'
-										}}>
-											{prediction.prediction_label}
-										</span>
-									</div>
-									<div style={{color: 'var(--color-text-muted)', fontSize: '0.9rem'}}>
-										<strong style={{color: 'var(--color-text)'}}>{prediction.probability}%</strong> ehtimol bilan
-									</div>
-								</div>
-								<RiskMeter score={prediction.risk_score}/>
-							</div>
+							{/* 👇 MATN O'CHIRILDI — FAQAT RISK METER QOLDI 👇 */}
+							<RiskMeter score={prediction.risk_score}/>
 						</div>
 
 						{/* Top features */}

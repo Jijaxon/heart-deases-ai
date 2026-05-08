@@ -226,30 +226,86 @@ def compare_models(
             comparison[name] = None
     return comparison
 
+# @router.get("/dashboard/stats", response_model=DashboardStats)
+# def get_dashboard_stats(
+#     db: Session = Depends(get_db),
+#     current_user: models.User = Depends(get_current_active_user)
+# ):
+#     """General stats for dashboard."""
+#     total = db.query(func.count(models.Patient.id)).scalar() or 0
+#     sick = db.query(func.count(models.Patient.id)).filter(models.Patient.target == 1).scalar() or 0
+#
+#     active_model = db.query(models.ModelMetrics).filter(
+#         models.ModelMetrics.is_active == True
+#     ).order_by(models.ModelMetrics.created_at.desc()).first()
+#
+#     return DashboardStats(
+#         total_patients=total,
+#         sick_patients=sick,
+#         healthy_patients=total - sick,
+#         high_risk_count=db.query(func.count(models.Prediction.id)).filter(models.Prediction.risk_score >= 70).scalar() or 0,
+#         medium_risk_count=db.query(func.count(models.Prediction.id)).filter(models.Prediction.risk_score.between(40, 69)).scalar() or 0,
+#         low_risk_count=db.query(func.count(models.Prediction.id)).filter(models.Prediction.risk_score < 40).scalar() or 0,
+#         total_predictions=db.query(func.count(models.Prediction.id)).scalar() or 0,
+#         avg_age=round(db.query(func.avg(models.Patient.age)).scalar() or 0, 1),
+#         avg_chol=round(db.query(func.avg(models.Patient.chol)).scalar() or 0, 1),
+#         model_accuracy=round(active_model.test_accuracy * 100, 1) if active_model and active_model.test_accuracy else None,
+#     )
+
 @router.get("/dashboard/stats", response_model=DashboardStats)
 def get_dashboard_stats(
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_active_user)
+        db: Session = Depends(get_db),
+        current_user: models.User = Depends(get_current_active_user)
 ):
     """General stats for dashboard."""
     total = db.query(func.count(models.Patient.id)).scalar() or 0
     sick = db.query(func.count(models.Patient.id)).filter(models.Patient.target == 1).scalar() or 0
-    
+
+    # ✅ Jins va kasallik bo'yicha statistikalar (DYNAMIC)
+    healthy_female = db.query(func.count(models.Patient.id)).filter(
+        models.Patient.sex == 0,
+        models.Patient.target == 0
+    ).scalar() or 0
+
+    healthy_male = db.query(func.count(models.Patient.id)).filter(
+        models.Patient.sex == 1,
+        models.Patient.target == 0
+    ).scalar() or 0
+
+    sick_female = db.query(func.count(models.Patient.id)).filter(
+        models.Patient.sex == 0,
+        models.Patient.target == 1
+    ).scalar() or 0
+
+    sick_male = db.query(func.count(models.Patient.id)).filter(
+        models.Patient.sex == 1,
+        models.Patient.target == 1
+    ).scalar() or 0
+
     active_model = db.query(models.ModelMetrics).filter(
         models.ModelMetrics.is_active == True
     ).order_by(models.ModelMetrics.created_at.desc()).first()
-    
+
     return DashboardStats(
         total_patients=total,
         sick_patients=sick,
         healthy_patients=total - sick,
-        high_risk_count=db.query(func.count(models.Prediction.id)).filter(models.Prediction.risk_score >= 70).scalar() or 0,
-        medium_risk_count=db.query(func.count(models.Prediction.id)).filter(models.Prediction.risk_score.between(40, 69)).scalar() or 0,
-        low_risk_count=db.query(func.count(models.Prediction.id)).filter(models.Prediction.risk_score < 40).scalar() or 0,
+        high_risk_count=db.query(func.count(models.Prediction.id)).filter(
+            models.Prediction.risk_score >= 70).scalar() or 0,
+        medium_risk_count=db.query(func.count(models.Prediction.id)).filter(
+            models.Prediction.risk_score.between(40, 69)).scalar() or 0,
+        low_risk_count=db.query(func.count(models.Prediction.id)).filter(
+            models.Prediction.risk_score < 40).scalar() or 0,
         total_predictions=db.query(func.count(models.Prediction.id)).scalar() or 0,
         avg_age=round(db.query(func.avg(models.Patient.age)).scalar() or 0, 1),
         avg_chol=round(db.query(func.avg(models.Patient.chol)).scalar() or 0, 1),
-        model_accuracy=round(active_model.test_accuracy * 100, 1) if active_model and active_model.test_accuracy else None,
+        model_accuracy=round(active_model.test_accuracy * 100,
+                             1) if active_model and active_model.test_accuracy else None,
+        # ✅ YANGI MAYDONLAR
+        healthy_female_patients=healthy_female,
+        healthy_male_patients=healthy_male,
+        sick_female_patients=sick_female,
+        sick_male_patients=sick_male,
     )
 
 @router.get("/feature-importance")
