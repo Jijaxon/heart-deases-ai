@@ -244,7 +244,7 @@ export default function PredictPage() {
 										}}>
 											<span style={{color: 'var(--color-text)', fontWeight: 500}}>{f.feature}</span>
 											<span style={{color: f.direction === 'xavfli' ? '#fc8181' : '#68d391', fontWeight: 600}}>
-												{f.value} ({f.direction})
+												{f?.value_label} ({f?.direction})
 											</span>
 										</div>
 										<div style={{

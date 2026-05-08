@@ -63,9 +63,11 @@ class PredictRequest(PatientBase):
 class FeatureImportanceItem(BaseModel):
     """Bitta feature importance elementi."""
     feature: str
+    feature_key: Optional[str] = None
     importance: float
     direction: str  # "yuqori" yoki "past"
     value: float
+    value_label: Optional[Any] = None  # Qiymatning tushunarli ko'rinishi
 
 
 class RecommendationItem(BaseModel):
