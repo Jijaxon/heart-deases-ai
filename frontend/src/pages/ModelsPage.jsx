@@ -40,14 +40,14 @@ export default function ModelsPage() {
               </div>
               <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--color-text)' }}>{data.accuracy}%</div>
               <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem' }}>Aniqlik</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', fontSize: '0.78rem' }}>
-                {[['F1', data.f1_score], ['AUC', data.roc_auc], ['Recall', data.recall], ['Namunalar', data.training_samples + ' ta']].map(([l, v]) => (
-                  <div key={l} style={{ background: 'var(--color-surface2)', padding: '0.35rem 0.5rem', borderRadius: '6px' }}>
-                    <span style={{ color: 'var(--color-text-muted)' }}>{l}: </span>
-                    <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>{typeof v === 'number' ? v + '%' : v}</span>
-                  </div>
-                ))}
-              </div>
+              {/*<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', fontSize: '0.78rem' }}>*/}
+              {/*  {[['F1', data.f1_score], ['AUC', data.roc_auc], ['Recall', data.recall], ['Namunalar', data.training_samples + ' ta']].map(([l, v]) => (*/}
+              {/*    <div key={l} style={{ background: 'var(--color-surface2)', padding: '0.35rem 0.5rem', borderRadius: '6px' }}>*/}
+              {/*      <span style={{ color: 'var(--color-text-muted)' }}>{l}: </span>*/}
+              {/*      <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>{typeof v === 'number' ? v + '%' : v}</span>*/}
+              {/*    </div>*/}
+              {/*  ))}*/}
+              {/*</div>*/}
             </div>
           ))}
         </div>
